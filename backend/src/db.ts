@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import { MONGODB_URL } from "./config.js";
+console.log(MONGODB_URL)
 // Connect to MongoDB
-export async function connectDB() {
+async function connectDB() {
     try {
         await mongoose.connect(MONGODB_URL);
         console.log("✅ Connected to MongoDB");
@@ -11,6 +12,7 @@ export async function connectDB() {
         process.exit(1);
     }
 }
+connectDB()
 
 // --- Interfaces ---
 interface IUser {
@@ -46,7 +48,7 @@ userSchema.methods.validatePassword = async function (candidatePassword: string)
 };
 
 const tagSchema = new mongoose.Schema({
-    title: { type: String, require: true, unique: true }
+    title: { type: String, required: true, unique: true }
 })
 
 

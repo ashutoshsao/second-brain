@@ -36,6 +36,7 @@ userRouter.post("/signup", async (req, res) => {
         res.status(500).json({
             message: "Server error"
         })
+        console.log(e)
     }
 })
 
@@ -65,10 +66,8 @@ userRouter.post("/signin", async (req, res) => {
             })
         }
 
-        const userId = existingUser._id
-
         const token = jwt.sign({
-            userId,
+            userId: existingUser._id
         }, JWT_SECRET)
 
         res.status(200).json({

@@ -2,7 +2,9 @@ import z from "zod";
 
 const signupZodSchema = z.object({
 
-    username: z.string().min(3, "Password must be at least 3 characters long").max(10, "Password must be at most 10 characters long"),
+    username: z.string()
+        .min(3, "Password must be at least 3 characters long")
+        .max(10, "Password must be at most 10 characters long"),
 
     password: z.string()
         .min(8, "Password must be at least 8 characters long")
