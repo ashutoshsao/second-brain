@@ -20,4 +20,14 @@ const signinZodSchema = signupZodSchema.pick({
     password: true,
 });
 
-export { signupZodSchema, signinZodSchema }
+const contentTypes = ['image', 'video', 'article', 'audio'] as const;
+
+const contentZodSchema = z.object({
+    link: z.url(), // must be a valid URL
+    type: z.enum(contentTypes), // restrict to allowed types
+    title: z.string().min(1, "Title is required"),
+    tags: z.array(z.string().optional()),
+    userId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ObjectId").optional()
+});
+
+export { signupZodSchema, signinZodSchema, contentZodSchema }

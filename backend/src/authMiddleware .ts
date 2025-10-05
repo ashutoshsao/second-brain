@@ -5,7 +5,9 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     const authHeaders = req.headers.authorization;
 
     if (!authHeaders || !authHeaders.startsWith("Bearer ")) {
-        res.status(403).json({});
+        return res.status(401).json({
+            message: "Access denied!"
+        });
     }
     const token = authHeaders?.split(' ')[1];
     try {
@@ -15,6 +17,8 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
         next();
     } catch (err) {
-        return res.status(403).json({});
+        return res.status(401).json({
+            message: "Access denied!"
+        });
     }
 }

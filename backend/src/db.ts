@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     password_hash: { type: String, require: true }
 })
 
-userSchema.statics.createHash = async function (plainTextPassword): Promise<string> {
+userSchema.statics.createHash = async function (plainTextPassword) {
     // Hashing user's salt and password with 10 iterations,
     const saltRounds = 10;
     // First method to generate a salt and then create hash 
@@ -43,7 +43,7 @@ userSchema.statics.createHash = async function (plainTextPassword): Promise<stri
     return await bcrypt.hash(plainTextPassword, salt);
 };
 
-userSchema.methods.validatePassword = async function (candidatePassword: string): Promise<boolean> {
+userSchema.methods.validatePassword = async function (candidatePassword: string) {
     return bcrypt.compare(candidatePassword, this.password_hash);
 };
 
@@ -51,13 +51,12 @@ const tagSchema = new mongoose.Schema({
     title: { type: String, required: true, unique: true }
 })
 
-
 const linkSchema = new mongoose.Schema({
     hash: { type: String, require: true },
     userId: {
         ref: "user",
         type: mongoose.Schema.Types.ObjectId,
-        require: true
+        required: true
     }
 })
 
@@ -68,7 +67,7 @@ const contentSchema = new mongoose.Schema({
     type: { type: String, enum: contentTypes, required: true },
     title: { type: String, required: true },
     tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 const User = mongoose.model<IUser, UserModel>("User", userSchema);
