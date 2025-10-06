@@ -1,7 +1,7 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import { contentZodSchema, signinZodSchema, signupZodSchema } from "../types.js";
-import { Content, Tag, User } from "../db.js";
+import { ContentModel, LinkModel, TagModel, UserModel } from "../db.js";
 import { JWT_SECRET } from "../config.js";
 import { authMiddleware } from "../authMiddleware .js";
 const userRouter = Router()
@@ -15,15 +15,15 @@ userRouter.post("/signup", async (req, res) => {
                 message: "Error in inputs"
             })
         }
-        const existingUser = await User.findOne({ username: body.username });
+        const existingUser = await UserModel.findOne({ username: body.username });
         if (existingUser) {
             return res.status(403).json({
-                message: "User already exists with this username"
+                message: "UserModel already exists with this username"
             })
         }
-        const password_hash = await User.createHash(body.password);
+        const password_hash = await UserModel.createHash(body.password);
 
-        const user = await User.create({
+        const user = await UserModel.create({
             username: body.username,
             password_hash: password_hash
         });
@@ -52,7 +52,7 @@ userRouter.post("/signin", async (req, res) => {
             })
         }
 
-        const existingUser = await User.findOne({ username: body.username });
+        const existingUser = await UserModel.findOne({ username: body.username });
         if (!existingUser) {
             return res.status(403).json({
                 message: "Wrong email password"
@@ -72,7 +72,7 @@ userRouter.post("/signin", async (req, res) => {
         }, JWT_SECRET)
 
         res.status(200).json({
-            message: "User signed in successfully",
+            message: "UserModel signed in successfully",
             token: token
         })
     }
@@ -96,14 +96,14 @@ userRouter.post("/content", authMiddleware, async (req, res) => {
 
         const tagDocs = await Promise.all(
             content.tags.map(async (tagTitle: string) => {
-                let tag = await Tag.findOne({ title: tagTitle })
+                let tag = await TagModel.findOne({ title: tagTitle })
                 if (!tag) {
-                    tag = await Tag.create({ title: tagTitle })
+                    tag = await TagModel.create({ title: tagTitle })
                 }
                 return tag._id
             })
         )
-        const data = await Content.create({
+        const data = await ContentModel.create({
             link: content.link,
             type: content.type,
             title: content.title,
@@ -112,7 +112,7 @@ userRouter.post("/content", authMiddleware, async (req, res) => {
         })
 
         return res.status(200).json({
-            mesage: "Content uploaded!"
+            mesage: "ContentModel uploaded!"
         })
     }
     catch (e) {
@@ -125,7 +125,7 @@ userRouter.post("/content", authMiddleware, async (req, res) => {
 
 userRouter.get("/content", authMiddleware, async (req, res) => {
     try {
-        const content = await Content.find({ userId: req.userId })
+        const content = await ContentModel.find({ userId: req.userId })
             .populate("tags", "title")     // array of refs
             .populate("userId", "username") // single ref
 
@@ -142,23 +142,93 @@ userRouter.get("/content", authMiddleware, async (req, res) => {
 })
 
 userRouter.delete("/content", authMiddleware, async (req, res) => {
-    const contentId = req.body.contentId
-    const userId = req.userId
-    await Content.deleteMany({
-        contentId: contentId,
-        userId: userId
+    try {
+        const contentId = req.body.contentId
+        const userId = req.userId
+        await ContentModel.deleteMany({
+            contentId: contentId,
+            userId: userId
+        })
+
+        res.status(200).json({
+            message: "Deleted!"
+        })
+    }
+    catch (e) {
+        console.log(e)
+        return res.status(403).json({
+            message: "Error in inputs"
+        })
+    }
+})
+
+userRouter.post("/brain/share", authMiddleware, async (req, res) => {
+    try {
+        const { share } = req.body;
+        if (share) {
+            const ExistingLink = await LinkModel.findOne({
+                userId: req.userId
+            })
+            if (ExistingLink) {
+                return res.status(200).json({
+                    "link": `${ExistingLink.hash}`
+                })
+            }
+            const link = await LinkModel.create({
+                userId: req.userId
+            })
+            return res.status(200).json({
+                "link": `${link.hash}`
+            })
+        }
+        else {
+            await LinkModel.deleteOne({
+                userId: req.userId
+            })
+            return res.status(200).json({
+                message: "Deleted!"
+            })
+        }
+    }
+    catch (e) {
+        console.log(e)
+        return res.status(403).json({
+            message: "Error in inputs"
+        })
+    }
+})
+
+userRouter.get("/brain/:shareLink", async (req, res) => {
+    const hash = req.params.shareLink
+
+    const linkHash = await LinkModel.findOne({
+        hash: hash
     })
+
+    if (!linkHash) {
+        return res.status(404).json({
+            message: "Sorry incorrect Input!"
+        })
+    }
+
+    const content = await ContentModel.find({
+        userId: linkHash.userId
+    })
+        .populate("tags", "title")
+
+    const user = await UserModel.findOne({
+        _id: linkHash.userId
+    })
+
+    if (!user) {
+        return res.status(411).json({
+            message: "user does not exist of the content!"
+        })
+    }
 
     res.status(200).json({
-        message: "Deleted!"
+        username: user.username,
+        content: content
     })
-})
-
-userRouter.post("/brain/share", (req, res) => {
-
-})
-
-userRouter.get("/brain/:shareLink", (req, res) => {
-
 })
 export { userRouter }

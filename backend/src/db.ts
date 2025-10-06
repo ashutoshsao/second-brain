@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import { MONGODB_URL } from "./config.js";
 console.log(MONGODB_URL)
+import crypto from "crypto";
+
 // Connect to MongoDB
 async function connectDB() {
     try {
@@ -51,14 +53,29 @@ const tagSchema = new mongoose.Schema({
     title: { type: String, required: true, unique: true }
 })
 
-const linkSchema = new mongoose.Schema({
-    hash: { type: String, require: true },
+interface ILink {
+    userId: mongoose.Types.ObjectId;
+    hash?: string; // <-- optional at creation time
+}
+
+function generateShareHash(length = 20) {
+    return crypto.randomBytes(length).toString("hex").slice(0, length);
+}
+
+const linkSchema = new mongoose.Schema<ILink>({
     userId: {
-        ref: "user",
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        ref: "User",
+        required: true,
+        unique: true
+    },
+    hash: {
+        type: String,
+        required: true,
+        unique: true,
+        default: () => generateShareHash(20)
     }
-})
+});
 
 const contentTypes = ['image', 'video', 'article', 'audio']; // Extend as needed
 
@@ -70,9 +87,9 @@ const contentSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
-const User = mongoose.model<IUser, UserModel>("User", userSchema);
-const Tag = mongoose.model("Tag", tagSchema);
-const Link = mongoose.model("Link", linkSchema);
-const Content = mongoose.model("Content", contentSchema);
+const UserModel = mongoose.model<IUser, UserModel>("User", userSchema);
+const TagModel = mongoose.model("Tag", tagSchema);
+const LinkModel = mongoose.model("Link", linkSchema);
+const ContentModel = mongoose.model("Content", contentSchema);
 
-export { User, Tag, Link, Content }
+export { UserModel, TagModel, LinkModel, ContentModel }
