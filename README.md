@@ -5,14 +5,14 @@ This is a "Second Brain" application, designed to help you organize, store, and 
 ## Development Status
 
 **Backend:** Partially completed.
-**Frontend:** Not started.
+**Frontend:** In progress.
 
 ## Project Structure
 
 The project is organized into two main directories:
 
 *   `backend/`: Contains the Node.js backend application.
-*   `frontend/`: Will contain the React frontend application (to be implemented).
+*   `frontend/`: Contains the React frontend application.
 
 ## Technology Stack
 
@@ -21,6 +21,12 @@ The project is organized into two main directories:
 *   **Database**: MongoDB with Mongoose for object data modeling.
 *   **Authentication**: JWT (JSON Web Tokens) for secure user authentication.
 *   **Password Hashing**: bcrypt for hashing user passwords.
+
+### Frontend
+
+*   **Framework**: React
+*   **Build Tool**: Vite
+*   **Language**: TypeScript
 
 ## Features
 
@@ -58,3 +64,24 @@ The backend is a Node.js application. To run it, follow these steps:
     ```
 
 The server will start on the port specified in `src/index.ts`.
+
+## Frontend Setup
+
+The frontend is a React application. To run it, follow these steps:
+
+1.  **Navigate to the frontend directory:**
+    ```bash
+    cd frontend
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+
+The frontend will be available at the address provided by Vite.
