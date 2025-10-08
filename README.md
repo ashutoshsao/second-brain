@@ -2,51 +2,73 @@
 
 This is a "Second Brain" application, designed to help you organize, store, and connect your thoughts, notes, and ideas.
 
-## Development Status
-
-**Backend:** Partially completed.
-**Frontend:** In progress.
-
-## Project Structure
-
-The project is organized into two main directories:
-
-*   `backend/`: Contains the Node.js backend application.
-*   `frontend/`: Contains the React frontend application.
-
-## Technology Stack
-
-### Backend
-
-*   **Database**: MongoDB with Mongoose for object data modeling.
-*   **Authentication**: JWT (JSON Web Tokens) for secure user authentication.
-*   **Password Hashing**: bcrypt for hashing user passwords.
-
-### Frontend
-
-*   **Framework**: React
-*   **Build Tool**: Vite
-*   **Language**: TypeScript
-
 ## Features
 
 ### Backend
 
-*   **User Authentication**: Partially implemented.
-*   **Note Management**: Not started.
-*   **Tagging/Categorization**: Not started.
-*   **Search**: Not started.
-*   **Graph-Based Linking**: Not started.
+- **User Authentication**: Secure user authentication using JWT (JSON Web Tokens).
+- **Content Management**: Create, retrieve, update, and delete your content.
+- **Tagging**: Assign tags to your content for better organization.
+- **Sharing**: Generate a public link to share your content with others.
 
-### Frontend (Planned)
+### Frontend
 
-*   **Rich Text Editor**: A powerful editor for creating and formatting notes.
-*   **Note Visualization**: A graph visualization to see the connections between your notes.
-*   **Intuitive UI**: A clean and easy-to-use interface for managing your second brain.
+- **User Authentication**: Signup and signin forms.
+- **Dashboard**: A dashboard to view and manage your content.
+- **Create Content Modal**: A modal to add new content.
+- **Custom UI Components**: A custom-built UI library with the following components:
+    - Button
+    - Card
+    - Input
+    - Sidebar
+    - SidebarItem
+    - and various icons.
 
-## Backend Setup
+## Technologies
 
-The backend is a Node.js application. To run it, follow these steps:
+### Backend
+
+- **Framework**: Node.js with Express
+- **Database**: MongoDB with Mongoose
+- **Authentication**: JWT (JSON Web Tokens)
+- **Password Hashing**: bcrypt
+- **Validation**: Zod
+
+### Frontend
+
+- **Framework**: React
+- **Build Tool**: Vite
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+
+## Project Structure
+
+The project is a monorepo with the following structure:
+
+```
+/
+├── backend/
+│   ├── src/
+│   └── ...
+└── frontend/
+    ├── src/
+    └── ...
+```
+
+- **`backend/`**: A Node.js, Express, and MongoDB application that serves as the API.
+- **`frontend/`**: A React, TypeScript, and Vite application that provides the user interface.
+
+## Getting Started
+
+To get started with development, you will need to run both the backend and frontend services.
+
+### Prerequisites
+
+- Node.js (v14 or later)
+- npm
+- MongoDB
+
+### Backend Setup
 
 1.  **Navigate to the backend directory:**
     ```bash
@@ -58,16 +80,18 @@ The backend is a Node.js application. To run it, follow these steps:
     npm install
     ```
 
-3.  **Start the server:**
+3.  **Create a `.env` file** in the `backend` directory and add the following environment variables:
+    ```
+    JWT_SECRET=your_jwt_secret
+    MONGO_URL=your_mongo_db_url
+    ```
+
+4.  **Start the server:**
     ```bash
     npm run dev
     ```
 
-The server will start on the port specified in `src/index.ts`.
-
-## Frontend Setup
-
-The frontend is a React application. To run it, follow these steps:
+### Frontend Setup
 
 1.  **Navigate to the frontend directory:**
     ```bash
@@ -84,4 +108,6 @@ The frontend is a React application. To run it, follow these steps:
     npm run dev
     ```
 
-The frontend will be available at the address provided by Vite.
+## Contributing
+
+Contributions are welcome! Please feel free to submit a pull request.

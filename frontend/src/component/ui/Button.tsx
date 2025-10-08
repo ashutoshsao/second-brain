@@ -6,12 +6,13 @@ interface ButtonProps {
     text: string;
     startIcon?: ReactElement;
     endIcon?: ReactElement;
-    onClick: () => void;
+    onClick?: () => void;
+    maxWidth?: boolean
 }
 
 const buttonVarients = {
-    "primary": "bg-indigo-500 text-indigo-200",
-    "secondary": "bg-indigo-200 text-indigo-500"
+    "primary": "bg-indigo-600 text-white hover:bg-indigo-700",
+    "secondary": "bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
 }
 
 const sizeVarients = {
@@ -20,14 +21,14 @@ const sizeVarients = {
     "lg": "py-4 px-6 text-xl rounded-xl"
 }
 
-const defaultVarients = "flex"
+const defaultVarients = "flex items-center font-light transition-all duration-300 cursor-pointer"
 
 
 
-export const Button = (props: ButtonProps) => {
-    return <button onClick={props.onClick} className={`${buttonVarients[props.varient]} ${defaultVarients} ${sizeVarients[props.size]} flex items-center`}>
-        {props.startIcon}
-        <div className="pl-2 pr-2">{props.text}</div>
-        {props.endIcon}
+export const Button = ({ varient, size, onClick, startIcon, endIcon, text, maxWidth }: ButtonProps) => {
+    return <button onClick={onClick} className={`${buttonVarients[varient]} ${sizeVarients[size]} ${defaultVarients} ${maxWidth ? "w-full justify-center items-center" : ""} `}>
+        {startIcon}
+        <div className="pl-2 pr-2">{text}</div>
+        {endIcon}
     </button>
 }

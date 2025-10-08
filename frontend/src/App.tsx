@@ -1,30 +1,12 @@
-import './App.css'
-import { Button } from './component/ui/Button'
-import { PlusIcon } from './icon/PlusIcon'
-import { ShareIcon } from './icon/ShareIcon'
+import Dashboard from "./pages/dashboard"
+import Signin from "./pages/Signin"
+import Signup from "./pages/Signup"
 
 function App() {
-
   return (
-    < >
-      <Button
-        startIcon={<PlusIcon size='lg' />}
-        varient='primary'
-        size="lg"
-        onClick={() => { }}
-        text="Share"
-        endIcon={< ShareIcon size='lg' />}
-      />
-      <Button
-        startIcon={<PlusIcon size='sm' />}
-        varient='primary'
-        size="sm"
-        onClick={() => { }}
-        text="Share"
-        endIcon={< ShareIcon size='sm' />}
-      />
-    </ >
+    // <Signup />
+    <Signin />
+    // <Dashboard />
   )
 }
-
 export default App
