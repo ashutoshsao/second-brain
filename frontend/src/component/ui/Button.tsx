@@ -28,7 +28,7 @@ const defaultVarients = "flex items-center font-light transition-all duration-30
 export const Button = ({ varient, size, onClick, startIcon, endIcon, text, maxWidth }: ButtonProps) => {
     return <button onClick={onClick} className={`${buttonVarients[varient]} ${sizeVarients[size]} ${defaultVarients} ${maxWidth ? "w-full justify-center items-center" : ""} `}>
         {startIcon}
-        <div className="pl-2 pr-2">{text}</div>
+        {text ? <div className="pl-2 pr-2">{text}</div> : null}
         {endIcon}
     </button>
 }

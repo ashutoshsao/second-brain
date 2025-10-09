@@ -77,7 +77,7 @@ const linkSchema = new mongoose.Schema<ILink>({
     }
 });
 
-const contentTypes = ['image', 'video', 'article', 'audio']; // Extend as needed
+const contentTypes = ['twitter', 'youtube', 'document']; // Extend as needed
 
 const contentSchema = new mongoose.Schema({
     link: { type: String, required: true },

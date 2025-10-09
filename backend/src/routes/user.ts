@@ -73,7 +73,7 @@ userRouter.post("/signin", async (req, res) => {
 
         res.status(200).json({
             message: "UserModel signed in successfully",
-            token: token
+            token: `Bearer ${token}`
         })
     }
     catch (e) {
