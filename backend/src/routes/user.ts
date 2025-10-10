@@ -18,7 +18,7 @@ userRouter.post("/signup", async (req, res) => {
         const existingUser = await UserModel.findOne({ username: body.username });
         if (existingUser) {
             return res.status(403).json({
-                message: "UserModel already exists with this username"
+                message: "User already exists with this username"
             })
         }
         const password_hash = await UserModel.createHash(body.password);
@@ -55,7 +55,7 @@ userRouter.post("/signin", async (req, res) => {
         const existingUser = await UserModel.findOne({ username: body.username });
         if (!existingUser) {
             return res.status(403).json({
-                message: "Wrong email password"
+                message: "Wrong username password"
             })
         }
 
@@ -63,7 +63,7 @@ userRouter.post("/signin", async (req, res) => {
 
         if (!validPassword) {
             return res.status(403).json({
-                message: "Wrong email password"
+                message: "Wrong username password"
             })
         }
 
@@ -87,6 +87,7 @@ userRouter.post("/content", authMiddleware, async (req, res) => {
     try {
         const content = req.body;
         const userId = req.userId
+        console.log(content)
         const { success } = contentZodSchema.safeParse(content);
         if (!success) {
             return res.status(411).json({
@@ -95,7 +96,7 @@ userRouter.post("/content", authMiddleware, async (req, res) => {
         }
 
         const tagDocs = await Promise.all(
-            content.tags.map(async (tagTitle: string) => {
+            (content.tags ?? []).map(async (tagTitle: string) => {
                 let tag = await TagModel.findOne({ title: tagTitle })
                 if (!tag) {
                     tag = await TagModel.create({ title: tagTitle })
@@ -112,7 +113,7 @@ userRouter.post("/content", authMiddleware, async (req, res) => {
         })
 
         return res.status(200).json({
-            mesage: "ContentModel uploaded!"
+            mesage: "Content uploaded!"
         })
     }
     catch (e) {
@@ -125,12 +126,13 @@ userRouter.post("/content", authMiddleware, async (req, res) => {
 
 userRouter.get("/content", authMiddleware, async (req, res) => {
     try {
-        const content = await ContentModel.find({ userId: req.userId })
+        const contents = await ContentModel.find({ userId: req.userId })
             .populate("tags", "title")     // array of refs
             .populate("userId", "username") // single ref
+            .sort({ _id: -1 }) // 👈 newest first
 
         return res.status(200).json({
-            content
+            contents
         })
     }
     catch (e) {

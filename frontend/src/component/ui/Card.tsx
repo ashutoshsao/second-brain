@@ -40,10 +40,10 @@ export const Card = ({ title, link, type }: CardProps) => {
                     </div>
                 </div>
             </div>
-            <div className="pt-4">
-                {type === "youtube" && < iframe className="w-full" src={link.replace("watch", "embed").replace("?v=", "/")} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>}
+            <div className="pt-4 flex justify-center">
+                {type === "youtube" && < iframe className="w-full max-w-65 aspect-video" src={link.replace("watch", "embed").replace("?v=", "/")} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>}
 
-                {type === "twitter" && <blockquote className="twitter-tweet">
+                {type === "twitter" && <blockquote className="twitter-tweet w-full max-w-65">
                     <a href={link.replace("x.com", "twitter.com")}></a>
                 </blockquote>}
             </div >

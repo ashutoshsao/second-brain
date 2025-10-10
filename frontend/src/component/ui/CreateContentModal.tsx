@@ -2,9 +2,6 @@ import { useRef, useState } from "react"
 import { CrossIcon } from "../../icon/CrossIcon"
 import { Button } from "./Button"
 import { Input } from "./Input"
-import { YouTubeIcon } from "../../icon/YouTubeIcon"
-import { TwitterIcon } from "../../icon/TwitterIcon"
-import { DocumentIcon } from "../../icon/DocumentIcon"
 import axios from "axios"
 import { BACKEND_URL } from "../../config"
 
@@ -15,14 +12,14 @@ interface CreateContentProps {
 
 enum ContentType {
     YouTube = "youtube",
-    Twitter = "twitter",
-    Document = "document"
+    Twitter = "twitter"
 }
 
 export const CreateContentModal = ({ open, onClose }: CreateContentProps) => {
     const titleRef = useRef<HTMLInputElement>(null)
     const linkRef = useRef<HTMLInputElement>(null)
-    const [type, setType] = useState(ContentType.Document)
+
+    const [type, setType] = useState(ContentType.YouTube)
 
     async function addContent() {
         const title = titleRef.current?.value
@@ -33,9 +30,10 @@ export const CreateContentModal = ({ open, onClose }: CreateContentProps) => {
             type
         }, {
             headers: {
-                Authorization: localStorage.getItem("token")
+                "Authorization": localStorage.getItem("token")
             }
         })
+        onClose()
     }
 
     return <div>
@@ -56,9 +54,8 @@ export const CreateContentModal = ({ open, onClose }: CreateContentProps) => {
                     Type
                 </div>
                 <div className="flex gap-2">
-                    <Button maxWidth={true} onClick={() => { setType(ContentType.Document) }} size="md" startIcon={<DocumentIcon />} varient={type === ContentType.Document ? "primary" : "secondary"} />
-                    <Button maxWidth={true} onClick={() => { setType(ContentType.YouTube) }} size="md" startIcon={<YouTubeIcon />} varient={type === ContentType.YouTube ? "primary" : "secondary"} />
-                    <Button maxWidth={true} onClick={() => { setType(ContentType.Twitter) }} size="md" startIcon={<TwitterIcon />} varient={type === ContentType.Twitter ? "primary" : "secondary"} />
+                    <Button maxWidth={true} onClick={() => { setType(ContentType.YouTube) }} size="md" text="Youtube" varient={type === ContentType.YouTube ? "primary" : "secondary"} />
+                    <Button maxWidth={true} onClick={() => { setType(ContentType.Twitter) }} size="md" text="twitter" varient={type === ContentType.Twitter ? "primary" : "secondary"} />
                 </div>
 
                 <div className="flex justify-center pt-2">

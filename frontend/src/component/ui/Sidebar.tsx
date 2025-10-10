@@ -7,7 +7,7 @@ import { YouTubeIcon } from "../../icon/YouTubeIcon"
 import { SidebarItem } from "./SidebarItem"
 
 export const Sidebar = () => {
-    return <div className="h-screen bg-white w-76 top-0 left-0 shadow-sm border-r border-gray-300">
+    return <div className="bg-white w-76 top-0 left-0 border-r border-gray-300">
         <div className="p-3 hover:bg-gray-100 transition-all duration-300 ">
             <span className="flex items-center cursor-pointer">
                 <BrainIcon />

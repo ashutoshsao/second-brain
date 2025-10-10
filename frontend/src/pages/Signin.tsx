@@ -16,7 +16,7 @@ export const Signin = () => {
             username,
             password
         })
-        const token = response.data.token.split(" ")[1]
+        const token = response.data.token
         localStorage.setItem("token", token)
         navigate("/dashboard")
     }
